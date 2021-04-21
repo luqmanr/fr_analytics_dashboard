@@ -1,0 +1,15 @@
+{
+    "status" : --> int, describing request status
+    "error_message" : --> string,
+    "data" : [ --> array of objects/dictionary
+        {   
+            "cluster_id" : --> string, describing the cluster(s) that a client_id owns
+            "result" : [ --> array of objects/dictionary
+                {
+                    "time" : --> int, describing the hour or date, depending on request params
+                    "value" : --> int, number of API access/hits
+                }
+            ]
+        }
+    ]
+}

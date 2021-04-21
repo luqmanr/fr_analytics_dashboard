@@ -1,0 +1,68 @@
+{
+    "status": 200,
+    "data": [
+        {
+            "cluster_id": "Trial",
+            "result": [
+                {
+                    "time": 0,
+                    "value": 20
+                },
+                {
+                    "time": 1,
+                    "value": 50
+                },
+                {
+                    "time": 2,
+                    "value": 300
+                },
+                {
+                    "time": 0,
+                    "value": 20
+                },
+                {
+                    "time": 1,
+                    "value": 50
+                },
+                {
+                    "time": 2,
+                    "value": 300
+                }
+            ]
+        },
+        {
+            "cluster_id": "luqmanr_cluster",
+            "result": [
+                {
+                    "time": 0,
+                    "value": 70
+                },
+                {
+                    "time": 1,
+                    "value": 12
+                },
+                {
+                    "time": 2,
+                    "value": 800
+                }
+            ]
+        },
+        {
+            "cluster_id": "riset.ai",
+            "result": [
+                {
+                    "time": 0,
+                    "value": 270
+                },
+                {
+                    "time": 1,
+                    "value": 140
+                },
+                {
+                    "time": 2,
+                    "value": 260
+                }
+            ]
+        }
+    ]
+}
