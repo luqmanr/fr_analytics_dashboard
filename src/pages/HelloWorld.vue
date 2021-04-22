@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <AreaChart :defaultData="chartData"></AreaChart>
+    <AreaChart/>
     <PieChart/>
     <BarChart/>
     <RadarChart/>
@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import AreaChart from "@/components/AreaChart.vue";
-import PieChart from "@/components/PieChart.vue";
-import BarChart from "@/components/BarChart.vue";
-import RadarChart from "@/components/RadarChart.vue";
-import LineChart from "@/components/LineChart.vue"
+import AreaChart from "@/components/templates/AreaChart.vue"
+import PieChart from "@/components/templates/PieChart.vue"
+import BarChart from "@/components/templates/BarChart.vue"
+import RadarChart from "@/components/templates/RadarChart.vue"
+import LineChart from "@/components/templates/LineChart.vue"
 
 export default {
   name: "App",

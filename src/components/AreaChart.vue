@@ -55,36 +55,24 @@ export default {
             {
                 labels: this.xAxisLabels,
                 datasets: this.chartData
-                // datasets: [
-                //     this.chartData[0],
-                //     {
-                //         label: "Data Two",
-                //         borderColor: "#05CBE1",
-                //         pointBackgroundColor: "white",
-                //         pointBorderColor: "white",
-                //         borderWidth: 1,
-                //         backgroundColor: this.gradient2,
-                //         data: [60, 55, 32, 10, 2, 12, 53]
-                //     }
-                // ]
             },
             { 
                 responsive: true, 
                 maintainAspectRatio: false,
                 legend: { 
                     labels: { 
-                        fontColor: "black" 
+                        fontColor: "white" 
                     }
                 },
                 scales: {
                     xAxes: [{
                         ticks: {
-                            fontColor: "black"
+                            fontColor: "white"
                         }
                     }],
                     yAxes: [{
                         ticks: {
-                            fontColor: "black"
+                            fontColor: "white"
                         }
                     }]
                 }
@@ -96,6 +84,6 @@ export default {
 
 <style scoped>
 canvas {
-    background-color: white;
+    background-color: rgba(230,230,230,0.1);
 }
 </style>

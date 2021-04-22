@@ -1,10 +1,14 @@
 <template>
     <div id="app">
-      <div id="timerange">
-
+      <div style="font-weight: bold;">
+        API Hits
       </div>
-      <AreaChart :chartData="chartData" :xAxisLabels="xAxisLabels" :key="updateChartToggle"></AreaChart>
-      <button @click="updateChartToggle += 1">UPDATE COMPONENT</button>
+      <AreaChart
+        id="recogLogHits" 
+        :chartData="chartData" 
+        :xAxisLabels="xAxisLabels" 
+        :key="updateChartToggle"/>
+      <!-- <button @click="FetchRecogLog">UPDATE COMPONENT</button> -->
     </div>
   </template>
   
@@ -16,51 +20,105 @@
     components: {
       AreaChart
     },
+    props: {
+      // // API config
+      logAPI: {
+        default: "https://api.riset.ai/api_fr/v3/recog_log_v2"
+      },
+      // // Dashboard Client or User Data
+      clientID: {
+        default: "dycodex"
+      },
+      clusterIDs: {
+        default() {
+            return []
+        }
+      },
+      timeRange: {
+        default: "day"
+      }
+    },
     data() {
       return {
-        recogLogAPI: "/riset.luqmanr.xyz/riset_ai/api_fr/v3/recog_log?time_range=day&client_id=dycodex&cluster_id=Trial",
-        // recogLogAPI: "/riset.luqmanr.xyz/fr_analytics/recog_log.json",
+        // // Rendering Utils
+        lastClusterID: "",
+
+        // // Chart Data & Chart Configs
         updateChartToggle: 0,
         chartData: [],
         xAxisLabels: [],
         recogLogData: [],
         chartColors: [
-          "rgba(253, 231, 170, 0.35)",   // yellow
-          "rgba(192, 170, 253, 0.35)",  // purple
-          "rgba(170, 231, 253, 0.35)",  // cyan
-          "rgba(170, 253, 183, 0.35)",   // green
-          "rgba(253, 170, 170, 0.35)",   // red          
+          "rgba(253, 231, 170, 0.5)",   // yellow
+          "rgba(192, 170, 253, 0.5)",   // purple
+          "rgba(170, 231, 253, 0.5)",   // cyan
+          "rgba(170, 253, 183, 0.5)",   // green
+          "rgba(253, 170, 170, 0.5)",   // red
+          "rgba(47, 208, 162, 0.5)",    // moss-green
+          "rgba(230, 147, 207, 0.5)",   // pink
+          "rgba(43, 98, 191, 0.5)",     // bue
+          "rgba(191, 132, 43, 0.5)",    // orange
+          "rgba(104, 62, 39, 0.5)",      // brown
         ]
       }
     },
     methods: {
         FetchRecogLog() {
-          this.axios.get(this.recogLogAPI)
+          var getRequest = this.logAPI + "?client_id=" + this.clientID + "&time_range=" + this.timeRange
+          // // Check if clusterIDs is not empty list
+          if (this.clusterIDs.length != 0) {
+            var i
+            for (i = 0; i < this.clusterIDs.length; i++) {
+              getRequest = getRequest + "&cluster_id=" + this.clusterIDs[i]
+            }
+          }
+          console.log(getRequest)
+          this.axios.get(getRequest)
           .then((recogLogs) => {
             this.recogLogData = recogLogs.data.data
+            this.xAxisLabels = []
 
             var chartLineColors = this.chartColors
             var newChartData = []
-            var i
-            for (i = 0; i < recogLogs.data.data.length; i++) {
+            var dataIndex
+            for (dataIndex = 0; dataIndex < recogLogs.data.data.length; dataIndex++) {
               // instantiate clusterData
               var clusterData = {}
               
               // assign label as cluster_id
-              clusterData.label = recogLogs.data.data[i].cluster_id
+              clusterData.label = recogLogs.data.data[dataIndex].cluster_id
 
               // for time in results, and append to newChartData
               clusterData.data = []
-              var j
-              for (j = 0; j < recogLogs.data.data[i].result.length; j++) {
-                clusterData.data.push(recogLogs.data.data[i].result[j].value)
-                if (i == 0 && j == 0) {
-                  var k
-                  for (k = 0; k < recogLogs.data.data[i].result.length; k++) {
-                    this.xAxisLabels.push(k)
+              var resultIndex
+              for (resultIndex = 0; resultIndex < recogLogs.data.data[dataIndex].result.length; resultIndex++) {
+                clusterData.data.push(recogLogs.data.data[dataIndex].result[resultIndex].value)
+
+                // update xAxisLabels (in this case, time range)
+                if (dataIndex == 0) {
+                  // // Parsing and Formatting xAxisLabel timeformat
+                  const timeString = recogLogs.data.data[dataIndex].result[resultIndex].time
+                  if (this.timeRange == "day") {
+                    var fromDate = timeString.split(" ")[0]
+                    var fromHour = timeString.split(" ")[1].slice(0,5)
+                    var toDate = timeString.split(" ")[3]
+                    var toHour = timeString.split(" ")[4].slice(0,5)
+                    var finalHour = fromHour + " - " + toHour
+                  } else {
+                    var fromDate = timeString.split(" ")[0]
+                    var toDate = timeString.split(" ")[2]
+                    var finalHour = ""
                   }
-                  console.log(JSON.stringify(this.xAxisLabels))
-                  // this.xAxisLabels.push("hour " + recogLogs.data.data[i].result[j].time)
+
+                  if (fromDate == toDate) {
+                    var finalDate = fromDate
+                  } else {
+                    var finalDate = fromDate + " - " + toDate
+                  }
+                  
+                  var timeLabel = [finalDate, finalHour]
+
+                  this.xAxisLabels.push(timeLabel)
                 }
               }              
 
@@ -80,13 +138,20 @@
               newChartData.push(clusterData)
             }
             this.chartData = newChartData
-            console.log(JSON.stringify(this.chartData))
             this.updateChartToggle += 1
           })
         }
     },
-    created() {
+    mounted() {
       this.FetchRecogLog()
+    },
+    watch: {
+      lastClusterID(clusterID) {
+        if (clusterID != "") {
+          console.log(this.clusterIDs)
+          this.clusterIDs.push(clusterID)
+        }
+      }
     }
   }
   </script>
@@ -99,6 +164,11 @@
     text-align: center;
     color: #ffffff;
     margin-top: 60px;
+  }
+
+  p {
+    text-align: left;
+    margin-left: 1vw;
   }
   </style>
   
