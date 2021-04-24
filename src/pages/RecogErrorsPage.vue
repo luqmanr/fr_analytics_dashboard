@@ -3,17 +3,26 @@
     <div style="font-weight: bold;">
       Recognition Errors
     </div>
-    <AreaChart
-      id="recogLogHits" 
-      :chartData="chartData" 
-      :xAxisLabels="xAxisLabels" 
-      :key="updateChartToggle"/>
+    <div class="row">
+      <div class="col-sm-4">
+        <h2>Successful Hits</h2>
+        <h1>{{ recogLogData.n_success }}</h1>
+        <h2>Error Hits</h2>
+        <h1>{{ recogLogData.n_failed }}</h1>
+      </div>
+      <AreaChart
+        id="recogLogHits" 
+        :chartData="chartData" 
+        :xAxisLabels="xAxisLabels" 
+        :key="updateChartToggle"
+        class="col-sm-8"/>
+    </div>
     <!-- <button @click="FetchRecogLog">UPDATE COMPONENT</button> -->
   </div>
 </template>
 
 <script>
-import AreaChart from "@/components/AreaChart.vue"
+import AreaChart from "@/components/charts/AreaChart.vue"
 
 export default {
   name: "App",
@@ -63,84 +72,84 @@ export default {
     }
   },
   methods: {
-      FetchRecogLog() {
-        var getRequest = this.logAPI + "?client_id=" + this.clientID + "&time_range=" + this.timeRange
-        // // Check if clusterIDs is not empty list
-        if (this.clusterIDs.length != 0) {
-          var i
-          for (i = 0; i < this.clusterIDs.length; i++) {
-            getRequest = getRequest + "&cluster_id=" + this.clusterIDs[i]
-          }
+    FetchRecogLog() {
+      var getRequest = this.logAPI + "?client_id=" + this.clientID + "&time_range=" + this.timeRange
+      // // Check if clusterIDs is not empty list
+      if (this.clusterIDs.length != 0) {
+        var i
+        for (i = 0; i < this.clusterIDs.length; i++) {
+          getRequest = getRequest + "&cluster_id=" + this.clusterIDs[i]
         }
-        console.log(getRequest)
-        this.axios.get(getRequest)
-        .then((recogLogs) => {
-          this.recogLogData = recogLogs.data.data
-          this.xAxisLabels = []
-
-          var chartLineColors = this.chartColors
-          var newChartData = []
-          var dataIndex
-          for (dataIndex = 0; dataIndex < recogLogs.data.data.length; dataIndex++) {
-            // instantiate clusterData
-            var clusterData = {}
-            
-            // assign label as cluster_id
-            clusterData.label = recogLogs.data.data[dataIndex].cluster_id
-
-            // for time in results, and append to newChartData
-            clusterData.data = []
-            var resultIndex
-            for (resultIndex = 0; resultIndex < recogLogs.data.data[dataIndex].result.length; resultIndex++) {
-              clusterData.data.push(recogLogs.data.data[dataIndex].result[resultIndex].n_failed)
-
-              // update xAxisLabels (in this case, time range)
-              if (dataIndex == 0) {
-                // // Parsing and Formatting xAxisLabel timeformat
-                const timeString = recogLogs.data.data[dataIndex].result[resultIndex].time
-                if (this.timeRange == "day") {
-                  var fromDate = timeString.split(" ")[0]
-                  var fromHour = timeString.split(" ")[1].slice(0,5)
-                  var toDate = timeString.split(" ")[3]
-                  var toHour = timeString.split(" ")[4].slice(0,5)
-                  var finalHour = fromHour + " - " + toHour
-                } else {
-                  var fromDate = timeString.split(" ")[0]
-                  var toDate = timeString.split(" ")[2]
-                  var finalHour = ""
-                }
-
-                if (fromDate == toDate) {
-                  var finalDate = fromDate
-                } else {
-                  var finalDate = fromDate + " - " + toDate
-                }
-                
-                var timeLabel = [finalDate, finalHour]
-
-                this.xAxisLabels.push(timeLabel)
-              }
-            }              
-
-            // assign clusterData styling
-            if (chartLineColors.length == 0) {
-              chartLineColors = this.chartColors
-            }
-            var selectedColorIndex = Math.floor(Math.random() * chartLineColors.length)
-            clusterData.borderColor = chartLineColors[selectedColorIndex]
-            clusterData.borderWidth = 3
-            clusterData.backgroundColor = chartLineColors[selectedColorIndex]
-            chartLineColors = chartLineColors.filter(item => item !== chartLineColors[selectedColorIndex])
-            // clusterData.pointBackgroundColor = "white"
-            // clusterData.pointBorderColor = "white"
-
-            // populate chartdata with clusterdata
-            newChartData.push(clusterData)
-          }
-          this.chartData = newChartData
-          this.updateChartToggle += 1
-        })
       }
+      console.log(getRequest)
+      this.axios.get(getRequest)
+      .then((recogLogs) => {
+        this.recogLogData = recogLogs.data
+        this.xAxisLabels = []
+
+        var chartLineColors = this.chartColors
+        var newChartData = []
+        var dataIndex
+        for (dataIndex = 0; dataIndex < recogLogs.data.data.length; dataIndex++) {
+          // instantiate clusterData
+          var clusterData = {}
+          
+          // assign label as cluster_id
+          clusterData.label = recogLogs.data.data[dataIndex].cluster_id
+
+          // for time in results, and append to newChartData
+          clusterData.data = []
+          var resultIndex
+          for (resultIndex = 0; resultIndex < recogLogs.data.data[dataIndex].result.length; resultIndex++) {
+            clusterData.data.push(recogLogs.data.data[dataIndex].result[resultIndex].n_failed)
+
+            // update xAxisLabels (in this case, time range)
+            if (dataIndex == 0) {
+              // // Parsing and Formatting xAxisLabel timeformat
+              const timeString = recogLogs.data.data[dataIndex].result[resultIndex].time
+              if (this.timeRange == "day") {
+                var fromDate = timeString.split(" ")[0]
+                var fromHour = timeString.split(" ")[1].slice(0,5)
+                var toDate = timeString.split(" ")[3]
+                var toHour = timeString.split(" ")[4].slice(0,5)
+                var finalHour = fromHour + " - " + toHour
+              } else {
+                fromDate = timeString.split(" ")[0]
+                toDate = timeString.split(" ")[2]
+                finalHour = ""
+              }
+
+              if (fromDate == toDate) {
+                var finalDate = fromDate
+              } else {
+                finalDate = fromDate + " - " + toDate
+              }
+              
+              var timeLabel = [finalDate, finalHour]
+
+              this.xAxisLabels.push(timeLabel)
+            }
+          }              
+
+          // assign clusterData styling
+          if (chartLineColors.length == 0) {
+            chartLineColors = this.chartColors
+          }
+          var selectedColorIndex = Math.floor(Math.random() * chartLineColors.length)
+          clusterData.borderColor = chartLineColors[selectedColorIndex]
+          clusterData.borderWidth = 3
+          clusterData.backgroundColor = chartLineColors[selectedColorIndex]
+          chartLineColors = chartLineColors.filter(item => item !== chartLineColors[selectedColorIndex])
+          // clusterData.pointBackgroundColor = "white"
+          // clusterData.pointBorderColor = "white"
+
+          // populate chartdata with clusterdata
+          newChartData.push(clusterData)
+        }
+        this.chartData = newChartData
+        this.updateChartToggle += 1
+      })
+    }
   },
   mounted() {
     this.FetchRecogLog()

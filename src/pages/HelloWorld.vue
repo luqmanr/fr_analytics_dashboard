@@ -9,11 +9,11 @@
 </template>
 
 <script>
-import AreaChart from "@/components/templates/AreaChart.vue"
-import PieChart from "@/components/templates/PieChart.vue"
-import BarChart from "@/components/templates/BarChart.vue"
-import RadarChart from "@/components/templates/RadarChart.vue"
-import LineChart from "@/components/templates/LineChart.vue"
+import AreaChart from "@/components/charts/templates/AreaChart.vue"
+import PieChart from "@/components/charts/templates/PieChart.vue"
+import BarChart from "@/components/charts/templates/BarChart.vue"
+import RadarChart from "@/components/charts/templates/RadarChart.vue"
+import LineChart from "@/components/charts/templates/LineChart.vue"
 
 export default {
   name: "App",

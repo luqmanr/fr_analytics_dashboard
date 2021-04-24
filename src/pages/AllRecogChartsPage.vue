@@ -62,10 +62,10 @@ export default {
     console.log(this.logAPI)
   },
   watch: {
-    clientID(e) {
+    clientID() {
       this.updateChartToggle++
     },
-    timeRange(e) {
+    timeRange() {
       this.updateChartToggle++
     },
     lastClusterID(clusterID) {
