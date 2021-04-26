@@ -1,16 +1,16 @@
 <template>
   <dIv>
-    <div id="form" class="row">
-      <div class="col-md-6 row">
+    <div id="form" class="app-card row">
+      <div class="form-input col-md-6 row">
         <span class="col-sm-4">ClientID: </span>
         <input type=text v-model.lazy="clientID" class="col-sm-11">
       </div>
-      <div class="col-md-6 row">
+      <div class="form-input col-md-6 row">
         <span class="col-sm-4">Cluster(s): </span>
         <input type=text v-model.lazy="lastClusterID" class="col-sm-10">
         <button @click="resetClusterID" class="col-sm-2">Reset</button>
       </div>
-      <div class="col-md-6 row">
+      <div class="form-input col-md-6 row">
         <span class="col-sm-4">Time Range: (day, week, month)</span>
         <input type=text v-model.lazy="timeRange" class="col-sm-11">
       </div>
@@ -27,7 +27,7 @@
       :clusterIDs="clusterIDs" 
       :timeRange="timeRange"
       :key="updateChartToggle"/>
-    <button @click="updateChartToggle++">FORCE UPDATE COMPONENTS</button>
+    <!-- <button @click="updateChartToggle++">FORCE UPDATE COMPONENTS</button> -->
   </dIv>
 </template>
 
@@ -79,5 +79,23 @@ export default {
 </script>
 
 <style scoped>
+.app-card {
+  background: #242e4e;
+  border-radius: 3em;
 
+  padding: 3vh 5vw;
+  margin: 1em 0em 1em 0em;
+
+  max-width: 100vw;
+}
+
+p {
+  font-family: Helvetica Neue Regular;
+}
+
+.form-input {
+  color: white;
+  text-align: left;
+  padding: 2vh;
+}
 </style>

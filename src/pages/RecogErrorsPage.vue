@@ -3,8 +3,8 @@
     <div style="font-weight: bold;">
       Recognition Errors
     </div>
-    <div class="row">
-      <div class="col-sm-4">
+    <div class="chart row">
+      <div class="summary col-sm-3">
         <h2>Successful Hits</h2>
         <h1>{{ recogLogData.n_success }}</h1>
         <h2>Error Hits</h2>
@@ -15,7 +15,7 @@
         :chartData="chartData" 
         :xAxisLabels="xAxisLabels" 
         :key="updateChartToggle"
-        class="col-sm-8"/>
+        class="col-sm-9"/>
     </div>
     <!-- <button @click="FetchRecogLog">UPDATE COMPONENT</button> -->
   </div>
@@ -32,7 +32,7 @@ export default {
   props: {
     // // API config
     logAPI: {
-      default: "/riset.luqmanr.xyz/riset_ai/api_fr/v3/recog_log_v2"
+      default: "https://api.riset.ai/api_fr/v3/recog_log_v2"
     },
     // // Dashboard Client or User Data
     clientID: {
@@ -165,7 +165,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -173,6 +173,14 @@ export default {
   text-align: center;
   color: #ffffff;
   margin-top: 60px;
+}
+
+.chart {
+  padding: 1vw;
+}
+
+.summary {
+  margin: auto;
 }
 
 p {

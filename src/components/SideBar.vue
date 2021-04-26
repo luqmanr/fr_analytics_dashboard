@@ -7,9 +7,10 @@
       <nav>
         <ul class="row">
             All have access to these pages
-            <router-link class='col-md-12' to="/" tag="button" exact>All Chart Types</router-link>
-            <router-link class='col-md-12' to="/all_recog_charts" tag="button" exact>All Recog Charts</router-link>
-            <router-link class='col-md-12' to="/recog_log" tag="button" exact>Recog Log v.1</router-link>
+            <!-- <router-link class='col-md-12' to="/" tag="button" exact>All Recognition Charts</router-link> -->
+            <router-link class='col-md-12' to="/all_recog_charts" tag="button" exact>All Recognition Charts</router-link>
+            <router-link class='col-md-12' to="/recog_log" tag="button" exact>Recognition Hits</router-link>
+            <router-link class='col-md-12' to="/recog_errors_log" tag="button" exact>Recognition Errors</router-link>
             <!-- <router-link class='col-md-12' :to="{ path:'/absensi' }" tag="button" exact>Absensi</router-link> -->
             <!-- <router-link v-if="buttonView" class='col-md-12' to="/" tag="button" exact>Demo Graphs & Charts</router-link> -->
           </ul>
